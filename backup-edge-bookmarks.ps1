@@ -21,7 +21,7 @@ function main {
 	removeTask $taskName
 	createTask $taskName $bookmarksPath $backupPath
 	
-	Write-Host "Ok, your Edge bookmarks will be backed up automatically every time you log in."
+	Write-Host "Ok, your Edge bookmarks will be backed up automatically every time you log in." -ForegroundColor Green
 }
 
 function createTask {
