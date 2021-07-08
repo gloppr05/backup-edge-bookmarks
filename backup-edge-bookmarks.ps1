@@ -1,4 +1,4 @@
-Write-Host "Backup Microsoft Edge bookmarks v1.0"
+Write-Host "Backup Microsoft Edge bookmarks v1.1"
 Write-Host "Homepage: https://github.com/gloppr05/backup-edge-bookmarks`n"
 
 function main {
@@ -21,7 +21,7 @@ function main {
 	removeTask $taskName
 	createTask $taskName $bookmarksPath $backupPath
 	
-	Write-Host "Ok, your Edge bookmarks will be backed up automatically every time you log in." -ForegroundColor Green
+	Write-Host "Ok, your Edge bookmarks will be backed up automatically once a day." -ForegroundColor Green
 }
 
 function createTask {
@@ -32,9 +32,10 @@ function createTask {
     )
 
     removeTask $taskName
+	$settings = New-ScheduledTaskSettingsSet -StartWhenAvailable
     $action = New-ScheduledTaskAction -Execute "cmd.exe" -Argument "/c copy /Y /V `"$bookmarksPath`" `"$backupPath`""
-    $trigger = New-ScheduledTaskTrigger -AtLogOn -User $(whoami)
-    Register-ScheduledTask -TaskName "$taskName" -Action $action -Trigger $trigger | Out-Null
+    $trigger = New-ScheduledTaskTrigger -Daily -At 10:30am
+    Register-ScheduledTask -TaskName "$taskName" -Action $action -Trigger $trigger -Settings $settings | Out-Null
 }
 
 function removeTask {
